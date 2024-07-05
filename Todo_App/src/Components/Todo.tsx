@@ -1,7 +1,11 @@
 import { useState } from "react"
 
-
 export default function Todo() {
+
+    const addTodo = (task: string) =>{
+        //console.log(task)
+
+    }
 
     const [task, settask] = useState("");
     const handlechange  = (event :  React.ChangeEvent<HTMLInputElement>) => {
@@ -13,9 +17,9 @@ export default function Todo() {
     // }
     const handlesubmit = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
-        //handleTodo(settask);
+        addTodo(task);
 
-        console.log(task)
+        //console.log(task)
         settask("");
 
     }
@@ -32,3 +36,5 @@ export default function Todo() {
         </>
     )
 }
+
+
