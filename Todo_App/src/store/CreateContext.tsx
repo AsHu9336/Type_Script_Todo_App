@@ -1,47 +1,81 @@
-import {  createContext,  useState , ReactNode } from "react";
+import { createContext, useState, ReactNode } from "react";
 
-export interface todo  {
-    id : number;
-    task : string;
-    completed : boolean;
-    date : Date
+export interface todo {
+    id: string;
+    task: string;
+    completed: boolean;
+    date: Date
 }
 
-export interface TodoContextType{
-    todos : todo[];
-    handleTodoApp : (task : string) => void;    
-    
+export interface TodoContextType {
+    todos: todo[];
+    handleTodoApp: (task: string) => void; // Call Signature
+    deleteTodo: (id: string) => void;
+    toggleTodo: (id: string) => void;
+
 }
 
- export const TodoContext = createContext<TodoContextType | null>(null)
+export const TodoContext = createContext<TodoContextType | null>(null)
 
- export interface TodoProviderProps {
+export interface TodoProviderProps {
     children: ReactNode;
-  }
+}
 
- export const TodoProvider = ({children}: TodoProviderProps )=> {
+export const TodoProvider = ({ children }: TodoProviderProps) => {
 
-    const [todos , settodos] = useState<todo[]>([]);
+    const [todos, settodos] = useState<todo[]>([]);
 
-    const handleTodoApp = (task : string) =>{
+    const handleTodoApp = (task: string) => {
         const newTodo = {
-            id : Math.random(),
-            task : task,
-            completed : false,
-            date : new Date()
+            id: Math.random().toString(),
+            task: task,
+            completed: false,
+            date: new Date()
         }
         console.log(newTodo)
-        settodos([...todos , newTodo]);
+        console.log(todos);
+        settodos([...todos, newTodo]);
+        return newTodo
 
         //     console.log(prev)
         //     console.log(newTodes);
 
     }
 
-    return
-    <TodoContext.Provider value={{todos, handleTodoApp}}>
+    const toggleTodo = (id: string) => {
+        settodos(todos.map(todo =>
+            todo.id === id ? { ...todo, completed: !todo.completed } : todo
+          ));
+
+
+    }
+
+    const deleteTodo = (id: string) => {
+        settodos((todos.filter((todos) => todos.id === id)));
+
+    }
+    // const handleTodoApp = (task:string)  => {
+    //     settodos((prev) =>{
+    //       const newTodos:todo[] = [
+    //         {
+    //             id:Math.random().toString(),
+    //             task:task,
+    //             completed:false,
+    //             date:new Date()
+    //         },
+    //         ...prev
+    //       ] 
+    //       console.log("my previous " + prev);          
+    //       console.log(newTodos);       
+    //        //localStorage.setItem("todos",JSON.stringify(newTodos))
+    //       return newTodos
+    //     })
+    // }
+
+    return <TodoContext.Provider value={{ todos, handleTodoApp, deleteTodo, toggleTodo }}>
         {children}
     </TodoContext.Provider>
 
- }
+}
+
 
